@@ -20,4 +20,4 @@ memcheck :
 	valgrind --leak-check=yes ./utest
 
 clean :
-	rm -f utest crc32_generate *.txt
+	rm -f utest crc32_generate *.txt *.o
