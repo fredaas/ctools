@@ -23,6 +23,7 @@ void print_values(Table *table)
     htable_values(table, (void **)values);
     for (int i = 0; i < table->size; i++)
         printf("%d\n", *((int *)values[i]));
+    free(values);
 }
 
 void print_bucket_values(Table *table)
@@ -94,12 +95,13 @@ void test_htable_insert(void)
 
     Table *table = htable_init(6);
 
+    int values[8];
+
     for (int i = 0; i < 8; i++)
     {
-        int *value = (int *)malloc(sizeof(int));
-        *value = i + 1;
+        values[i] = i + 1;
         assert_status(
-            htable_insert(table, &i, sizeof(int), value),
+            htable_insert(table, &i, sizeof(int), &(values[i])),
             "htable_insert"
         );
     }
@@ -115,12 +117,12 @@ void test_htable_clear(void)
 
     Table *table = htable_init(6);
 
-    int i = 0;
-    for (i = 0; i < 8; i++)
+    int values[8];
+
+    for (int i = 0; i < 8; i++)
     {
-        int *value = (int *)malloc(sizeof(int));
-        *value = i + 1;
-        htable_insert(table, &i, sizeof(int), value);
+        values[i] = i + 1;
+        htable_insert(table, &i, sizeof(int), &(values[i]));
     }
 
     assert_status(
@@ -178,7 +180,7 @@ void test_htable_keys(void)
 
     Table *table = setup_table();
 
-    int **keys = malloc(n_elements * sizeof(int));
+    int **keys = (int **)malloc(n_elements * sizeof(int *));
 
     assert_status(
         htable_keys(table, (void **)keys),
@@ -188,6 +190,8 @@ void test_htable_keys(void)
     printf("[%d] Success\n", test_index);
 
     htable_destroy(table);
+
+    free(keys);
 }
 
 void test_htable_values(void)
@@ -196,7 +200,7 @@ void test_htable_values(void)
 
     Table *table = setup_table();
 
-    int **values = malloc(n_elements * sizeof(int));
+    int **values = malloc(n_elements * sizeof(int *));
 
     assert_status(
         htable_values(table, (void **)values),
@@ -206,6 +210,8 @@ void test_htable_values(void)
     printf("[%d] Success\n", test_index);
 
     htable_destroy(table);
+
+    free(values);
 }
 
 int main(void)
