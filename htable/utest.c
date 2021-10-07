@@ -5,8 +5,6 @@
 
 #include "htable.h"
 
-int test_index = 0;
-
 int n_elements = 12;
 
 
@@ -55,15 +53,17 @@ Table * setup_table(void)
     return table;
 }
 
-void assert_status(int code, char *test_name)
+void _print_status(const char *fname, int errors)
 {
-    if (code != HTABLE_SUCCESS)
-    {
-        printf("[%d] %s: ", test_index, test_name);
-        htable_assert(code);
-        exit(1);
-    }
+    if (errors)
+        printf("[ \e[0;91mfail\e[0m    ] %s\n", fname);
+    else
+        printf("[ \e[0;92msuccess\e[0m ] %s\n", fname);
 }
+
+#define print_status(errors) do { \
+    _print_status(__func__, errors); \
+} while (0)
 
 
 /******************************************************************************
@@ -75,119 +75,83 @@ void assert_status(int code, char *test_name)
 
 void test_htable_init(void)
 {
-    test_index++;
-
     Table *table = htable_init(6);
-
-    assert_status(
-        table != NULL ? HTABLE_SUCCESS : HTABLE_ENOMEM,
-        "htable_init"
-    );
-
+    print_status(table != NULL ? 0 : 1);
     htable_destroy(table);
-
-    printf("[%d] Success\n", test_index);
 }
 
 void test_htable_insert(void)
 {
-    test_index++;
+    int errors = 0;
 
     Table *table = htable_init(6);
 
     int values[8];
-
     for (int i = 0; i < 8; i++)
     {
         values[i] = i + 1;
-        assert_status(
-            htable_insert(table, &i, sizeof(int), &(values[i])),
-            "htable_insert"
-        );
+        errors += htable_insert(table, &i, sizeof(int), &(values[i]));
     }
 
-    htable_destroy(table);
+    print_status(errors);
 
-    printf("[%d] Success\n", test_index);
+    htable_destroy(table);
 }
 
 void test_htable_clear(void)
 {
-    test_index++;
-
     Table *table = htable_init(6);
 
     int values[8];
-
     for (int i = 0; i < 8; i++)
     {
         values[i] = i + 1;
         htable_insert(table, &i, sizeof(int), &(values[i]));
     }
 
-    assert_status(
-        htable_clear(table),
-        "htable_clear"
-    );
+    print_status(htable_clear(table));
 
     htable_destroy(table);
-
-    printf("[%d] Success\n", test_index);
 }
 
 void test_htable_remove(void)
 {
-    test_index++;
+    int errors = 0;
 
     Table *table = setup_table();
 
     for (int i = 0; i < n_elements; i++)
-    {
-        assert_status(
-            htable_remove(table, &i, sizeof(int)),
-            "htable_remove"
-        );
-    }
+        errors += htable_remove(table, &i, sizeof(int));
 
-    printf("[%d] Success\n", test_index);
+    print_status(errors);
 
     htable_destroy(table);
 }
 
 void test_htable_get(void)
 {
-    test_index++;
+    int errors = 0;
 
     Table *table = setup_table();
 
     for (int i = 0; i < n_elements; i++)
     {
         int *value;
-        assert_status(
-            htable_get(table, &i, sizeof(int), (void**)&value),
-            "htable_get"
-        );
+        errors += htable_get(table, &i, sizeof(int), (void**)&value);
     }
 
-    printf("[%d] Success\n", test_index);
+    print_status(errors);
 
     htable_destroy(table);
 }
 
 void test_htable_keys(void)
 {
-    test_index++;
-
     Table *table = setup_table();
 
     int **keys = (int **)malloc(n_elements * sizeof(int *));
 
-    assert_status(
-        htable_keys(table, (void **)keys),
-        "htable_keys"
-    );
-
-    printf("[%d] Success\n", test_index);
+    print_status(htable_keys(table, (void **)keys));
 
     htable_destroy(table);
 
@@ -196,18 +160,11 @@ void test_htable_keys(void)
 
 void test_htable_values(void)
 {
-    test_index++;
-
     Table *table = setup_table();
 
     int **values = malloc(n_elements * sizeof(int *));
 
-    assert_status(
-        htable_values(table, (void **)values),
-        "htable_keys"
-    );
-
-    printf("[%d] Success\n", test_index);
+    print_status(htable_values(table, (void **)values));
 
     htable_destroy(table);
 
