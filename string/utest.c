@@ -3,13 +3,17 @@
 #include <stdio.h>
 #include <string.h>
 
-void print_status(const char *fname, int errors)
+void _print_status(const char *fname, int errors)
 {
     if (errors)
-        printf("%s [ \e[0;91mfail\e[0m ]\n", fname);
+        printf("[ \e[0;91mfail\e[0m    ] %s\n", fname);
     else
-        printf("%s [ \e[0;92msuccess\e[0m ]\n", fname);
+        printf("[ \e[0;92msuccess\e[0m ] %s\n", fname);
 }
+
+#define print_status(errors) do { \
+    _print_status(__func__, errors); \
+} while (0)
 
 void test_string_split(void)
 {
@@ -34,7 +38,7 @@ void test_string_split(void)
         i++;
     }
 
-    print_status(__func__, errors);
+    print_status(errors);
 }
 
 void test_string_strip(void)
@@ -54,7 +58,7 @@ void test_string_strip(void)
     string_strip(string, "\"\n~");
     errors += strcmp(string, "x~x");
 
-    print_status(__func__, errors);
+    print_status(errors);
 }
 
 int main(void)
