@@ -1,4 +1,7 @@
 #include <string.h>
+#include <stdlib.h>
+#include <inttypes.h>
+#include <stdio.h>
 
 #include "string.h"
 
@@ -55,4 +58,48 @@ void string_strip(char *src, char *token)
     while (i < j && string_contains(token, src[i]))
         i++;
     strcpy(src, src + i);
+}
+
+uint32_t nbits(uint32_t b)
+{
+    uint32_t count = 0;
+    while ((b >>= 1) > 0)
+        count++;
+    return count + 1;
+}
+
+void print_bin(uint32_t b)
+{
+    int n = nbits(b);
+    while (n > 0)
+        printf("%d", (b >> --n) & 1);
+    printf("\n");
+}
+
+int lut(char c)
+{
+    if (c >= '0' && c <= '9')
+        return c - '0';
+    else if (c >= 'a' && c <= 'f')
+        return c - 'a' + 10;
+    else if (c >= 'A' && c <= 'F')
+        return c - 'A' + 10;
+    return -1;
+}
+
+uint32_t hex2bin(char *s)
+{
+    int k, i = 0;
+    uint32_t acc = 0;
+    while ((k = lut(s[i++])) != -1)
+        acc = (acc << 4) + k;
+    return acc;
+}
+
+void bin2char(char *s, uint32_t b)
+{
+    int i = 0, n = nbits(b);
+    while (n > 0)
+        s[i++] = (b >> --n) & 1 ? '1' : '0';
+    s[i] = '\0';
 }

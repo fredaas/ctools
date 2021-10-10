@@ -2,11 +2,12 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <inttypes.h>
 
 void _print_status(const char *fname, int errors)
 {
     if (errors)
-        printf("[ \e[0;91mfail\e[0m    ] %s\n", fname);
+        printf("[ \e[0;91mfail\e[0m ] %s\n", fname);
     else
         printf("[ \e[0;92msuccess\e[0m ] %s\n", fname);
 }
@@ -61,10 +62,40 @@ void test_string_strip(void)
     print_status(errors);
 }
 
+void test_hex2bin(void)
+{
+    int errors = 0;
+    uint32_t b;
+
+    b = hex2bin("abcd");
+    errors += (b != 0xabcd);
+    b = hex2bin("ffffffff");
+    errors += (b != 0xffffffff);
+    b = hex2bin("12340000");
+    errors += (b != 0x12340000);
+    print_status(errors);
+}
+
+void test_bin2char(void)
+{
+    int errors = 0;
+    char s[32 + 1];
+    bin2char(s, 0b110011);
+    errors += (strcmp(s, "110011") != 0);
+    bin2char(s, 0b1010101010101010101010101010101);
+    errors += (strcmp(s, "1010101010101010101010101010101") != 0);
+    bin2char(s, 0b11111111111111111111111111111111);
+    errors += (strcmp(s, "11111111111111111111111111111111") != 0);
+
+    print_status(errors);
+}
+
 int main(void)
 {
     test_string_split();
     test_string_strip();
+    test_bin2char();
+    test_hex2bin();
 
     return 0;
 }
