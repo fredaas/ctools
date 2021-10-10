@@ -56,7 +56,7 @@ Table * setup_table(void)
 void _print_status(const char *fname, int errors)
 {
     if (errors)
-        printf("[ \e[0;91mfail\e[0m    ] %s\n", fname);
+        printf("[ \e[0;91mfail\e[0m ] %s\n", fname);
     else
         printf("[ \e[0;92msuccess\e[0m ] %s\n", fname);
 }
