@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+ * Initializes the queue and returns a pointer to it
+ */
 Queue * queue_init(int num_items)
 {
     Queue *queue = (Queue *)malloc(sizeof(Queue));
@@ -15,6 +18,9 @@ Queue * queue_init(int num_items)
     return queue;
 }
 
+/**
+ * Adds a new element to the end of the queue
+ */
 void queue_push(Queue *self, void *value)
 {
     if (self->size >= self->num_items)
@@ -24,6 +30,9 @@ void queue_push(Queue *self, void *value)
     self->tail = ((self->tail + 1) % self->num_items);
 }
 
+/**
+ * Returns and removes the next item in the queue
+ */
 void queue_pop(Queue *self, void **value)
 {
     if (self->size == 0)
@@ -33,6 +42,9 @@ void queue_pop(Queue *self, void **value)
     self->head = ((self->head + 1) % self->num_items);
 }
 
+/**
+ * Returns the next item in the queue
+ */
 void queue_peek(Queue *self, void **value)
 {
     *value = self->list[self->head].value;

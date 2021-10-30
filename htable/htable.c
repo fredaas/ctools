@@ -10,7 +10,7 @@ static uint32_t polynomial[] = {
 static uint32_t crc32_ieee802_3[256];
 static uint32_t *crc32_table = (uint32_t *)crc32_ieee802_3;
 
-/*
+/**
  * Returns a new table
  */
 Table * htable_init(int num_buckets)
@@ -30,7 +30,7 @@ Table * htable_init(int num_buckets)
     return table;
 }
 
-/*
+/**
  * Inserts a new key-value pair
  */
 int htable_insert(Table *self, void *key, int key_size, void *value)
@@ -66,7 +66,7 @@ int htable_insert(Table *self, void *key, int key_size, void *value)
     return HTABLE_SUCCESS;
 }
 
-/*
+/**
  * Returns the value matching 'key'
  */
 int htable_get(Table *self, void *key, int key_size, void **value)
@@ -94,7 +94,7 @@ int htable_get(Table *self, void *key, int key_size, void **value)
     return HTABLE_SUCCESS;
 }
 
-/*
+/**
  * Removes the bucket entry matching 'key'
  */
 int htable_remove(Table *self, void *key, int key_size)
@@ -129,7 +129,7 @@ int htable_remove(Table *self, void *key, int key_size)
     return HTABLE_SUCCESS;
 }
 
-/*
+/**
  * Returns the head bucket pointer of 'index'
  */
 TableBucket *htable_bucket(Table *self, int index)
@@ -143,7 +143,7 @@ TableBucket *htable_bucket(Table *self, int index)
     return self->buckets[index];
 }
 
-/*
+/**
  * Deallocates all bucket resources but keeps the bucket head pointers
  */
 int htable_clear(Table *self)
@@ -169,7 +169,7 @@ int htable_clear(Table *self)
     return HTABLE_SUCCESS;
 }
 
-/*
+/**
  * Deallocates all table resources
  */
 int htable_destroy(Table *self)
@@ -196,7 +196,7 @@ int htable_destroy(Table *self)
     return HTABLE_SUCCESS;
 }
 
-/*
+/**
  * Returns all table keys
  */
 int htable_keys(Table *self, void **keys)
@@ -218,7 +218,7 @@ int htable_keys(Table *self, void **keys)
     return HTABLE_SUCCESS;
 }
 
-/*
+/**
  * Returns all table values
  */
 int htable_values(Table *self, void **values)
@@ -240,7 +240,7 @@ int htable_values(Table *self, void **values)
     return HTABLE_SUCCESS;
 }
 
-/*
+/**
  * Prints a message describing 'code'
  */
 void htable_assert(int code)
@@ -262,7 +262,7 @@ void htable_assert(int code)
     }
 }
 
-/*
+/**
  * Generate CRC32 polynomial table
  *
  * Types:
@@ -293,7 +293,7 @@ void crc32_generate(int type)
     }
 }
 
-/*
+/**
  * Write CRC32 polynomial table to file
  */
 void crc32_dump(char *path)
@@ -314,7 +314,7 @@ void crc32_dump(char *path)
     fclose(f);
 }
 
-/*
+/**
  * Returns the CRC32 key hash
  */
 uint32_t crc32_hash(void *key, int key_size)
