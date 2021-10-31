@@ -7,4 +7,4 @@ utest : utest.c queue.c
 	$(CC) -o $@ $^ $(CFLAGS)
 
 clean :
-	rm -f string
+	rm -f string utest
