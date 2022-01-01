@@ -91,12 +91,44 @@ void test_bin2char(void)
     print_status(errors);
 }
 
+void test_bit_set(void)
+{
+    int errors = 0;
+    char s[32 + 1];
+    uint32_t b;
+
+    b = 0b10101010;
+    bit_set(&b, 0);
+    bit_set(&b, 2);
+    bit_set(&b, 10);
+    bin2char(s, b);
+    errors += (strcmp(s, "10010101111") != 0);
+
+    b = 0b10101010;
+    bit_range_set(&b, 0, 6, 0b000001);
+    bin2char(s, b);
+    errors += (strcmp(s, "10000001") != 0);
+
+    b = 0b11111111;
+    bit_range_set(&b, 0, 8, 0b01111110);
+    bin2char(s, b);
+    errors += (strcmp(s, "1111110") != 0);
+
+    b = 0b11111111;
+    bit_range_set(&b, 4, 4, 0b1001);
+    bin2char(s, b);
+    errors += (strcmp(s, "10011111") != 0);
+
+    print_status(errors);
+}
+
 int main(void)
 {
     test_string_split();
     test_string_strip();
     test_bin2char();
     test_hex2bin();
+    test_bit_set();
 
     return 0;
 }

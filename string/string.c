@@ -126,3 +126,60 @@ void bin2char(char *s, uint32_t b)
         s[i++] = (b >> n) & 1 ? '1' : '0';
     s[i] = '\0';
 }
+
+/**
+ * Clears the nth bit of x
+ */
+void bit_clear(uint32_t *x, uint32_t n)
+{
+    *x &= ~(1UL << n);
+}
+
+/**
+ * Sets the nth bit of x
+ */
+void bit_set(uint32_t *x, uint32_t n)
+{
+    *x |= (1UL << n);
+}
+
+/**
+ * Toggles the nth bit of x
+ */
+void bit_toggle(uint32_t *x, uint32_t n)
+{
+    *x ^= (1UL << n);
+}
+
+/**
+ * Clears w consecutive bits of x, starting from bit-position n
+ */
+void bit_range_clear(uint32_t *x, uint32_t n, uint32_t w)
+{
+    *x &= (0xFFFFFFFF << (n + w)) | ((1UL << n) - 1);
+}
+
+/**
+ * Sets w consecutive bits (y) of x, starting from bit-position n
+ */
+void bit_range_set(uint32_t *x, uint32_t n, uint32_t w, uint32_t y)
+{
+    *x &= (0xFFFFFFFF << (n + w)) | ((1UL << n) - 1);
+    *x |= (y << n);
+}
+
+/**
+ * Toggles w consecutive bits of x, starting from bit-position n
+ */
+void bit_range_toggle(uint32_t *x, uint32_t n, uint32_t w)
+{
+    *x ^= ((1UL << w) - 1) << n;
+}
+
+/**
+ * Returns the bit range [a, b] of x
+ */
+uint32_t bit_range(uint32_t x, uint32_t a, uint32_t b)
+{
+    return (x >> b) & ((1UL << (a - b + 1)) - 1);
+}
