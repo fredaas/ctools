@@ -27,7 +27,6 @@ void string_split(char dst[][32], char *src, char *token)
     strcpy(dst[i], "\0");
 }
 
-
 /**
  * Checks if 'src' contains 'symbol'
  *
@@ -74,15 +73,19 @@ uint32_t nbits(uint32_t b)
     return count + 1;
 }
 
-
 /**
  * Prints the binary representation of 'b'
  */
-void print_bin(uint32_t b)
+void printbin(uint32_t b, uint32_t w)
 {
     int n = nbits(b);
-    while (n > 0)
-        printf("%d", (b >> --n) & 1);
+    if ((int)(w = w - n) > 0)
+    {
+        while (w-- > 0)
+            printf("0");
+    }
+    while (n-- > 0)
+        printf("%d", (b >> n) & 1);
     printf("\n");
 }
 
@@ -119,7 +122,7 @@ uint32_t hex2bin(char *s)
 void bin2char(char *s, uint32_t b)
 {
     int i = 0, n = nbits(b);
-    while (n > 0)
-        s[i++] = (b >> --n) & 1 ? '1' : '0';
+    while (n-- > 0)
+        s[i++] = (b >> n) & 1 ? '1' : '0';
     s[i] = '\0';
 }

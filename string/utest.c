@@ -73,6 +73,7 @@ void test_hex2bin(void)
     errors += (b != 0xffffffff);
     b = hex2bin("12340000");
     errors += (b != 0x12340000);
+
     print_status(errors);
 }
 
