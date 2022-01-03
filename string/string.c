@@ -156,16 +156,7 @@ void bit_toggle(uint32_t *x, uint32_t n)
  */
 void bit_range_clear(uint32_t *x, uint32_t n, uint32_t w)
 {
-    *x &= (0xFFFFFFFF << (n + w)) | ((1UL << n) - 1);
-}
-
-/**
- * Sets w consecutive bits (y) of x, starting from bit-position n
- */
-void bit_range_set(uint32_t *x, uint32_t n, uint32_t w, uint32_t y)
-{
-    *x &= (0xFFFFFFFF << (n + w)) | ((1UL << n) - 1);
-    *x |= (y << n);
+    *x &= ~(((1UL << w) - 1) << n);
 }
 
 /**
@@ -174,6 +165,14 @@ void bit_range_set(uint32_t *x, uint32_t n, uint32_t w, uint32_t y)
 void bit_range_toggle(uint32_t *x, uint32_t n, uint32_t w)
 {
     *x ^= ((1UL << w) - 1) << n;
+}
+
+/**
+ * Sets w consecutive bits (y) of x, starting from bit-position n
+ */
+void bit_range_write(uint32_t *x, uint32_t n, uint32_t w, uint32_t y)
+{
+    *x = (*x & ~(((1UL << w) - 1) << n)) | (y << n);
 }
 
 /**
