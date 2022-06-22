@@ -76,16 +76,10 @@ uint32_t nbits(uint32_t b)
 /**
  * Prints the binary representation of 'b'
  */
-void printbin(uint32_t b, uint32_t w)
+void print_bits(uint32_t b, uint32_t w)
 {
-    int n = nbits(b);
-    if ((int)(w = w - n) > 0)
-    {
-        while (w-- > 0)
-            printf("0");
-    }
-    while (n-- > 0)
-        printf("%d", (b >> n) & 1);
+    while (w-- > 0)
+        printf("%d", (b >> w) & 1);
     printf("\n");
 }
 
@@ -152,27 +146,27 @@ void bit_toggle(uint32_t *x, uint32_t n)
 }
 
 /**
- * Clears w consecutive bits of x, starting from bit-position n
+ * Clears n consecutive bits, starting from bit-position i
  */
-void bit_range_clear(uint32_t *x, uint32_t n, uint32_t w)
+void bit_range_clear(uint32_t *x, uint32_t i, uint32_t n)
 {
-    *x &= ~(((1UL << w) - 1) << n);
+    *x &= ~(((1UL << n) - 1) << i);
 }
 
 /**
- * Toggles w consecutive bits of x, starting from bit-position n
+ * Toggles n consecutive bits, starting from bit-position i
  */
-void bit_range_toggle(uint32_t *x, uint32_t n, uint32_t w)
+void bit_range_toggle(uint32_t *x, uint32_t i, uint32_t n)
 {
-    *x ^= ((1UL << w) - 1) << n;
+    *x ^= ((1UL << n) - 1) << i;
 }
 
 /**
- * Sets w consecutive bits (y) of x, starting from bit-position n
+ * Sets n consecutive bits, starting from bit-position i
  */
-void bit_range_write(uint32_t *x, uint32_t n, uint32_t w, uint32_t y)
+void bit_range_write(uint32_t *x, uint32_t i, uint32_t n, uint32_t y)
 {
-    *x = (*x & ~(((1UL << w) - 1) << n)) | (y << n);
+    *x = (*x & ~(((1UL << n) - 1) << i)) | (y << i);
 }
 
 /**
@@ -181,4 +175,21 @@ void bit_range_write(uint32_t *x, uint32_t n, uint32_t w, uint32_t y)
 uint32_t bit_range(uint32_t x, uint32_t a, uint32_t b)
 {
     return (x >> b) & ((1UL << (a - b + 1)) - 1);
+}
+
+
+/**
+ * Rotates x to the right n number of times
+ */
+void bit_rrotate(uint32_t *x, uint32_t w, uint32_t n)
+{
+    *x = (*x >> n) | (*x << (w - n));
+}
+
+/**
+ * Rotates x to the left n number of times
+ */
+void bit_lrotate(uint32_t *x, uint32_t w, uint32_t n)
+{
+    *x = (*x << n) | (*x >> (w - n));
 }
